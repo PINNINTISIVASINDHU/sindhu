@@ -1,0 +1,194 @@
+#include<conio.h>
+#include<stdlib.h>
+#include<string.h>
+#include<iostream>
+#include<cstdio>
+using namespace std;
+static int a =0;
+class rb{
+	private:
+		char busn[5],driver[25], arrival_time[20], depature_time[35],from[10], to[20],seat[6][4][10];
+		public:
+			void allotment();
+			void install();
+			void empty();
+			void avail();
+			void position(int i);
+			void show();
+}
+bus[10];
+//just for decoration  purpose
+void vline(char ch){
+	for(int i=0;i<100;i++)
+	cout<<ch;
+}
+//for buses installation process
+void rb :: install(){
+	cout<<"\nenter busno:";
+	cin>>bus[a].busn;
+	cout<<"\n enter drivers name:";
+	cin>>bus[a].driver;
+	cout<<"\n enter arrival_time:";
+	cin>>bus[a].arrival_time;
+	cout<<"\n enter depature_time:";
+	cin>>bus[a].depature_time;
+	cout<<"enter from place:";
+	cin>>bus[a].from;
+	cout<<"enter to place:";
+	cin>>bus[a].to;
+	bus[a].empty();
+a++;
+}
+//seat allotment processs
+void rb :: allotment(){
+
+	int seat;
+	char userneededbusno[5];
+	top:
+	cout<<"enter busno:";
+	cin>>userneededbusno;
+	int n;
+		for(n=0;n<=a;n++){
+			
+		if(strcmp(bus[n].busn,userneededbusno)==0)
+			break;
+	}
+		
+		while(n<=a){
+			cout<<"enter seatno:";
+			cin>>seat;
+			if(seat>40){
+				cout<<"\n There are only 40 seats avvaliable in this bus.";
+			}
+			else{
+			
+			if(strcmp(bus[n].seat[seat/4][(seat%4)-1],"Empty")==0){
+				cout<<"enter passengers name:";
+				cin>>bus[n].seat[seat/4][seat%4-1];
+				break;
+			}
+			else
+				cout<<"\n sry!this seat has been reserved already.";
+			
+			}
+		}
+		if(n>a){
+			cout<<"enter correct busno:";
+			goto top;
+		}
+		
+	
+}
+//just for displayig the information of bus
+void rb::show(){
+	int n;
+	char no[5];
+	cout<<"enter bus no:";
+	cin>>no;
+	for(n=0;n<=a;n++){
+	
+	if(strcmp(bus[n].busn,no)==0)
+	break;
+}
+while(n<=a){
+	vline('#');
+	cout<<"\n bus no:\t"<<bus[n].busn
+	<<" driver name:\t"<<bus[n].driver
+	<<" arrival time:\t"<<bus[n].arrival_time
+	<<"\n depature time:\t" 
+	<<"to:"<<bus[n].to<<"\n";                          
+
+	vline('#');
+	bus[0].position(n);
+	int s =0;
+	for(int i = 0;i<6;i++){
+		for(int j= 0;j<4;j++){
+			s++;
+			if(strcmp(bus[n].seat[i][j],"Empty")!=0)
+				cout<<"\n the seat  "<<s<<"reserved for "<<bus[n].seat[i][j]<<"!";
+			
+		}
+	}
+	break;
+}
+if(n>a)
+	cout<<"enter correct bus no:";
+}
+//to check in a particular position whether the seat is empty or not
+void rb :: position(int d){
+	int a = 0,p = 0;
+	
+	for( int i =0;i<6;i++){
+		cout<<"\n";
+		for(int j=0;j<4;j++){
+			a++;
+			if(strcmp(bus[d].seat[i][j],"Empty")==0){
+				cout.width(5);
+				cout<<a<<".";
+				cout.width(5);
+			  cout<<bus[d].seat[i][j];
+				p++;
+			}
+			else{
+				cout.width(5);
+				cout<<a<<".";
+				cout.width(5);
+				cout<<bus[d].seat[i][j];
+				
+			}
+			
+		}
+		
+	}
+	cout<<"\n there are "<<p<<"no of seats empty in busno:"<<bus[d].busn;
+}
+//to know a particular is reserved r empty
+void rb :: empty(){
+	for(int i =0;i<6;i++){
+		for(int j = 0;j<4;j++){
+			strcpy(bus[a].seat[i][j],"Empty");
+		}
+	}
+}
+//to know how many seats are avaliable in bus
+void rb :: avail(){
+	for(int n=0;n<=a;n++){
+	vline('#');
+	cout<<"\n bus no:\t"<<bus[n].busn
+	<<" driver name:\t"<<bus[n].driver
+	<<" arrival time:"<<bus[n].arrival_time
+	<<"\n depature time:\t"<<bus[n].depature_time
+	<<"from: \t"<<bus[n].from
+	<<"to:"<<bus[n].to<<"\n";                          
+
+	vline('#');
+	vline('_');
+	}
+}
+
+int main(){
+	system("cls");
+	int ch;
+	while(1){
+		
+		cout<<"\n\t\t\t1.install";
+		cout<<"\n\t\t\t2.seat allotment";
+		cout<<"\n\t\t\t3.show";
+		cout<<"\n\t\t\t4.buses ava;iable";
+		cout<<"\n\t\t\t5.exit";
+		cout<<"\nenter ur choice: ";
+		cin>>ch;
+		switch(ch){
+			case 1:bus[a].install();
+			break;
+				case 2:bus[a].allotment();
+			break;
+				case 3:bus[a].show();
+			break;
+				case 4:bus[a].avail();
+			break;
+				case 5:exit(0);
+		}
+	}
+	return 0;
+}
